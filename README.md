@@ -12,7 +12,7 @@ How do temperature and salinity shape when and where *H. triquetra* and *P. mini
 
 ## Data
 
-All data are public and come from the Chesapeake Bay Program DataHub. The raw downloads were combined into one spreadsheet per dataset, which are included in the `Data` folder.
+All phytoplankton and water quality data are public and come from the Chesapeake Bay Program DataHub. The raw downloads were combined into one spreadsheet per dataset, which are included in the `Data` folder.
 
 - **Phytoplankton counts** (cells/L): CBP Phytoplankton Monitoring, taxonomic counts. https://datahub.chesapeakebay.net/LivingResources (Plankton → Phytoplankton → Taxonomic Data). Also described at https://www.chesapeakebay.net/what/downloads/baywide-cbp-plankton-database
 - **Temperature (°C) and salinity (ppt)**: CBP Tidal Water Quality Monitoring (MAIN project, parameters WTEMP and SALINITY). https://datahub.chesapeakebay.net/WaterQuality
@@ -20,34 +20,40 @@ All data are public and come from the Chesapeake Bay Program DataHub. The raw do
 Files in `Data`:
 - `CompiledPhytoplanktonData.xlsx`: compiled phytoplankton counts, 1984–2025
 - `CompiledTSData.xlsx`: compiled temperature and salinity profiles, 1984–2026
-- `hab_surface_compiled.csv`: the cleaned surface dataset (one row per station per sampling date, both datasets matched), created by the EDA notebook and used by the analysis notebook
+- `hab_surface_compiled.csv`: the cleaned surface dataset (one row per station per sampling date, with both datasets matched), created by the notebook
+- `chesapeake_land.geojson`: land outline for the station map, from Natural Earth 10 m land polygons (public domain, https://www.naturalearthdata.com), clipped to the Chesapeake Bay area
 
 ## Repository structure
 
+```
 Class-Project/
 ├── README.md
 ├── Data/
-│ ├── CompiledPhytoplanktonData.xlsx
-│ ├── CompiledTSData.xlsx
-│ └── hab_surface_compiled.csv
+│   ├── CompiledPhytoplanktonData.xlsx
+│   ├── CompiledTSData.xlsx
+│   ├── hab_surface_compiled.csv
+│   └── chesapeake_land.geojson
 └── Code/
-├── hab_dinoflagellate_exploratory_data_analysis.ipynb
-├── HAB_Bloom_descriptive_analysis.ipynb
-└── AI_Citation.txt
-
+    ├── winter_hab_analysis.ipynb
+    └── AI_Citation.txt
+```
 
 ## How to run
 
-1. Download or clone this repository, keeping the folder structure the same (the notebooks find the data with the path `../Data/`).
+1. Download or clone this repository, keeping the folder structure the same (the notebook finds the data with the path `../Data/`).
 2. Install the required Python packages (for example, in an Anaconda environment):
+   ```
+   conda install pandas numpy matplotlib openpyxl scikit-learn
+   ```
+3. Open Jupyter from the repository folder, open `Code/winter_hab_analysis.ipynb`, and run Kernel → Restart & Run All. Loading the two spreadsheets takes a minute or two.
 
-conda install pandas numpy matplotlib openpyxl scikit-learn
-
-3. Open Jupyter from the repository folder and run the notebooks in this order (Kernel → Restart & Run All):
-   1. `Code/hab_dinoflagellate_exploratory_data_analysis.ipynb`: exploratory data analysis. Combines the two spreadsheets, restricts the data to the surface layer, keeps only dates with both datasets, and saves `Data/hab_surface_compiled.csv`. Also describes data sources, spatial and temporal coverage, and overlap. Loading the spreadsheets takes a minute or two.
-   2. `Code/HAB_Bloom_descriptive_analysis.ipynb`: main analysis. Bloom definitions and patterns over time, space, and season (Part 1); temperature and salinity conditions (Part 2); k-means clustering of temperature–salinity regimes (Part 3); and KNN classification of presence and high abundance (Part 4).
-
-`hab_surface_compiled.csv` is already included, so the analysis notebook can also be run on its own.
+The notebook runs from top to bottom in this order:
+- **Data:** sources and access, compiling the two CBP datasets into one surface dataset (saved as `Data/hab_surface_compiled.csv`), spatial and temporal coverage, data overlap, and surface temperature and salinity conditions.
+- **Part 1:** bloom definitions and patterns over time, space, and season.
+- **Part 2:** temperature and salinity conditions associated with high abundances.
+- **Part 3:** k-means clustering of temperature–salinity regimes.
+- **Part 4:** KNN classification of presence and high abundance.
+- **Summary:** main findings, limitations, and references.
 
 ## Main findings
 
